@@ -1,0 +1,273 @@
+% !TeX program = lualatex
+% 2025 年第十届全国密码技术竞赛作品设计报告 LaTeX 模板
+% 使用前请阅读 README.md；提交前务必关闭提示并检查匿名要求。
+
+\documentclass[UTF8,a4paper,zihao=5,fontset=none]{ctexart}
+
+\usepackage{amsmath,amssymb}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{fontspec}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{pifont}
+\usepackage{tabularx}
+\usepackage{xcolor}
+
+% 2025 官方 Word 模板字体。缺失时使用可随 TeX Live/Overleaf 分发的近似字体。
+\IfFontExistsTF{Calibri}
+  {\setmainfont{Calibri}}
+  {\setmainfont{Carlito}}
+\IfFontExistsTF{SimSun}
+  {\setCJKmainfont{SimSun}[BoldFont=SimHei]}
+  {\setCJKmainfont{FandolSong-Regular}[BoldFont=FandolSong-Bold]}
+\IfFontExistsTF{FangSong}
+  {\setCJKmonofont{FangSong}}
+  {\setCJKmonofont{FandolFang-Regular}}
+\IfFontExistsTF{STKaiti}
+  {\newCJKfontfamily\HeadingOneFont{STKaiti}}
+  {\newCJKfontfamily\HeadingOneFont{FandolKai-Regular}}
+\IfFontExistsTF{SimHei}
+  {\newCJKfontfamily\HeadingTwoFont{SimHei}}
+  {\newCJKfontfamily\HeadingTwoFont{FandolHei-Regular}}
+\IfFontExistsTF{KaiTi}
+  {\newCJKfontfamily\OfficialKai{KaiTi}[AutoFakeBold=2]}
+  {\newCJKfontfamily\OfficialKai{FandolKai-Regular}[AutoFakeBold=2]}
+\IfFontExistsTF{Times New Roman}
+  {\newfontfamily\HeadingLatin{Times New Roman}}
+  {\newfontfamily\HeadingLatin{TeX Gyre Termes}}
+
+% -----------------------------------------------------------------------------
+% 页面与通用样式：依据 2025 官方 Word 模板设置为 A4、四边 2 cm。
+% -----------------------------------------------------------------------------
+\geometry{top=2cm,bottom=2cm,left=2cm,right=2cm,headheight=15pt,headsep=0.55cm}
+\hypersetup{
+  hidelinks,
+  pdfstartview=FitH,
+  pdfauthor={},
+  pdftitle={2025年第十届全国密码技术竞赛作品设计报告}
+}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0pt}
+\linespread{1.5}
+\setlist{nosep,leftmargin=2em}
+
+\definecolor{TemplateGray}{HTML}{666666}
+\definecolor{CodeBackground}{HTML}{F6F8FA}
+\definecolor{CodeFrame}{HTML}{D0D7DE}
+
+\ctexset{
+  section={
+    name={,},
+    number=\arabic{section},
+    aftername={.},
+    format=\raggedright\HeadingOneFont\fontsize{15pt}{22.5pt}\selectfont,
+    beforeskip=1.2ex,
+    afterskip=1.2ex
+  },
+  subsection={
+    name={,},
+    number=\thesection.\arabic{subsection},
+    aftername={\quad},
+    format=\raggedright\HeadingLatin\HeadingTwoFont\fontsize{14pt}{21pt}\selectfont,
+    beforeskip=1ex,
+    afterskip=0.8ex
+  }
+}
+
+\lstset{
+  basicstyle=\small\ttfamily,
+  backgroundcolor=\color{CodeBackground},
+  frame=single,
+  rulecolor=\color{CodeFrame},
+  numbers=left,
+  numberstyle=\tiny\color{TemplateGray},
+  breaklines=true,
+  showstringspaces=false,
+  tabsize=2,
+  columns=fullflexible
+}
+
+% -----------------------------------------------------------------------------
+% 只需修改本区内容
+% -----------------------------------------------------------------------------
+\newcommand{\WorkNumber}{CACR2025XXXXXX}
+\newcommand{\WorkTitle}{作品题目}
+\newcommand{\ReportDate}{2025年\quad 月\quad 日}
+\newcommand{\WorkAbstract}{请在此填写作品内容摘要。}
+\newcommand{\WorkKeywords}{关键词一；关键词二；关键词三；关键词四；关键词五}
+
+% 作品类别：将所选类别改为 true，其余保持 false。
+\newif\ifSoftwareDesign      \SoftwareDesigntrue
+\newif\ifHardwareProduction \HardwareProductionfalse
+\newif\ifEngineeringPractice\EngineeringPracticefalse
+\newif\ifCryptographyApp     \CryptographyAppfalse
+\newif\ifOtherCategory       \OtherCategoryfalse
+
+% 模板提示默认显示；正式提交前改为 \TemplateHintsfalse。
+\newif\ifTemplateHints       \TemplateHintstrue
+
+% -----------------------------------------------------------------------------
+% 内部命令，一般无需修改
+% -----------------------------------------------------------------------------
+\newcommand{\CheckedBox}{\makebox[1.35em][l]{\rlap{$\square$}\hspace{0.14em}\raisebox{0.12em}{\scriptsize\ding{51}}}}
+\newcommand{\EmptyBox}{\makebox[1.35em][l]{$\square$}}
+\newcommand{\Choice}[2]{\csname if#1\endcsname\CheckedBox\else\EmptyBox\fi #2}
+\newcommand{\CategoryLine}{%
+  \Choice{SoftwareDesign}{软件设计}\quad
+  \Choice{HardwareProduction}{硬件制作}\quad
+  \Choice{EngineeringPractice}{工程实践}\quad
+  \Choice{CryptographyApp}{密码应用技术}\quad
+  \Choice{OtherCategory}{其它}%
+}
+\newcommand{\TemplateHint}[1]{%
+  \ifTemplateHints
+    \par{\OfficialKai\fontsize{14pt}{24pt}\selectfont\color{black}#1}\par
+  \fi
+}
+
+\fancypagestyle{reportstyle}{
+  \fancyhf{}
+  \fancyhead[C]{\zihao{-5} 全国密码技术竞赛作品设计报告}
+  \fancyfoot[C]{\zihao{-5}\thepage}
+  \renewcommand{\headrulewidth}{0.4pt}
+  \renewcommand{\footrulewidth}{0pt}
+}
+
+\begin{document}
+
+% -----------------------------------------------------------------------------
+% 封面
+% -----------------------------------------------------------------------------
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+  \thispagestyle{empty}
+  \noindent
+  \begin{minipage}[t]{0.70\textwidth}
+    \OfficialKai\zihao{4}
+    作品编号：\WorkNumber\\[0.75em]
+    作品类别：\Choice{SoftwareDesign}{软件设计}\quad
+              \Choice{HardwareProduction}{硬件制作}\quad
+              \Choice{EngineeringPractice}{工程实践}\\[0.35em]
+    \hspace*{5em}\Choice{CryptographyApp}{密码应用技术}\quad
+              \Choice{OtherCategory}{其它}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[t]{0.22\textwidth}
+    \raggedleft\vspace{-0.4cm}
+    \includegraphics[width=3.2cm]{imgs/logo.png}
+  \end{minipage}
+
+  \vspace*{4.0cm}
+
+  \begin{center}
+    {\OfficialKai\bfseries\fontsize{18pt}{27pt}\selectfont 2025年第十届全国密码技术竞赛\\[0.5em]作品设计报告\par}
+
+    \vspace{2.2cm}
+    {\OfficialKai\zihao{4} 作品题目：\underline{\makebox[10.5cm][c]{\WorkTitle}}\par}
+  \end{center}
+
+  \vspace{1.8cm}
+  \noindent\hspace*{2em}
+  \parbox{\dimexpr\textwidth-4em\relax}{%
+    \OfficialKai\bfseries\fontsize{14pt}{24pt}\selectfont
+    注意：作品为匿名评审，作品设计报告封面和内容中严禁出现单位名称、
+    指导老师姓名或团队成员姓名，违者将被取消参赛资格。提交作品时请将
+    此段落文字删除。
+  }
+
+  \vfill
+  \begin{center}
+    {\OfficialKai\zihao{4} \ReportDate\par}
+    \vspace{0.65em}
+    {\OfficialKai\zihao{4} 中国密码学会\par}
+  \end{center}
+\end{titlepage}
+\hypersetup{pageanchor=true}
+
+% -----------------------------------------------------------------------------
+% 基本信息表
+% -----------------------------------------------------------------------------
+\pagestyle{reportstyle}
+\setcounter{page}{1}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.55}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|}
+  \hline
+  \centering\bfseries\zihao{3} 基本信息表\tabularnewline
+  \hline
+  \textbf{编号：}\WorkNumber\tabularnewline
+  \hline
+  \textbf{作品题目：}\WorkTitle\tabularnewline
+  \hline
+  \textbf{作品类别：}\CategoryLine\tabularnewline
+  \hline
+  \rule{0pt}{8.2cm}\textbf{作品内容摘要：}\par
+  \vspace{0.5em}\WorkAbstract\par
+  \tabularnewline
+  \hline
+  \rule{0pt}{2.2cm}\textbf{关键词（五个）：}\par
+  \vspace{0.5em}\WorkKeywords\par
+  \tabularnewline
+  \hline
+\end{tabularx}
+\end{center}
+
+\clearpage
+
+% -----------------------------------------------------------------------------
+% 正文。以下标题来自 2025 官方 Word 模板，可按作品实际情况适当增删。
+% -----------------------------------------------------------------------------
+\section{作品功能与性能说明}
+\TemplateHint{说明作品解决的问题、主要功能、使用对象、运行环境与关键性能。}
+
+\section{设计与实现方案}
+
+\subsection{实现原理}
+\TemplateHint{可插入硬件框图、软件流程图、系统架构图及相关说明。}
+
+\subsection{运行结果}
+\TemplateHint{展示系统界面、核心流程、代表性输出及必要说明。}
+
+\subsection{技术指标}
+\TemplateHint{给出可验证的功能、性能、安全性或资源消耗指标。}
+
+\section{系统测试与结果}
+
+\subsection{测试方案}
+\TemplateHint{说明测试环境、软硬件配置、数据、变量、基线与评价方法。}
+
+\subsection{功能测试}
+\TemplateHint{按功能项说明测试步骤、预期结果与实际结果。}
+
+\subsection{性能测试}
+\TemplateHint{报告吞吐率、时延、资源占用等与作品相关的性能结果。}
+
+\subsection{测试数据与结果}
+\TemplateHint{建议使用清晰的表格或图形汇总数据，并解释结果。}
+
+\section{应用前景}
+\TemplateHint{说明适用场景、推广条件、现实价值与后续改进方向。}
+
+\section{结论}
+\TemplateHint{总结作品实现内容、验证结果、主要贡献与当前局限。}
+
+\ifTemplateHints
+  \vfill
+  {\color{black}\OfficialKai\fontsize{12pt}{24pt}\selectfont
+  注意：以上一级标题和二级标题供参考，参赛团队可以根据作品实际情况适当增删。
+  正式提交前请设置 \texttt{\string\TemplateHintsfalse}，并删除封面匿名提醒文字。}
+\fi
+
+% 如需参考文献，可取消以下注释并按需扩展。
+% \clearpage
+% \begin{thebibliography}{99}
+%   \bibitem{example} 作者. 文献题目[J]. 期刊, 年份, 卷(期): 页码.
+% \end{thebibliography}
+
+\end{document}
