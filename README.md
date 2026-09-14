@@ -5,7 +5,7 @@
 
   基于第十届全国密码技术竞赛官方 Word 模板整理
 
-  [![LaTeX](https://img.shields.io/badge/LaTeX-LuaLaTeX-008080?logo=latex&logoColor=white)](https://www.latex-project.org/)
+  [![LaTeX](https://img.shields.io/badge/LaTeX-XeLaTeX-008080?logo=latex&logoColor=white)](https://www.latex-project.org/)
   [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 </div>
 
@@ -37,10 +37,10 @@
 推荐使用 TeX Live 2024 或更新版本：
 
 ```bash
-latexmk -lualatex template.tex
+latexmk -xelatex template.tex
 ```
 
-Overleaf 中将主文件设为 `template.tex`，编译器选择 **LuaLaTeX**。
+Overleaf 中将主文件设为 `template.tex`，编译器选择 **XeLaTeX**。
 
 模板在 Windows 中优先使用官方 Word 文件指定的宋体、华文楷体、黑体、
 楷体、Calibri 和 Times New Roman；缺少这些字体时会自动使用开源近似字体。
