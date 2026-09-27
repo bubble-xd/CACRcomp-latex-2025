@@ -114,14 +114,14 @@
 % -----------------------------------------------------------------------------
 % 内部命令，一般无需修改
 % -----------------------------------------------------------------------------
-\newcommand{\CheckedBox}{\makebox[1.35em][l]{\rlap{$\square$}\hspace{0.14em}\raisebox{0.12em}{\scriptsize\ding{51}}}}
+\newcommand{\CheckedBox}{\makebox[1.35em][l]{\rlap{$\square$}\hspace{0.03em}\raisebox{-0.04em}{\fontsize{14pt}{14pt}\selectfont\ding{51}}}}
 \newcommand{\EmptyBox}{\makebox[1.35em][l]{$\square$}}
 \newcommand{\Choice}[2]{\csname if#1\endcsname\CheckedBox\else\EmptyBox\fi #2}
 \newcommand{\CategoryLine}{%
   \Choice{SoftwareDesign}{软件设计}\quad
   \Choice{HardwareProduction}{硬件制作}\quad
   \Choice{EngineeringPractice}{工程实践}\quad
-  \Choice{CryptographyApp}{密码应用技术}\quad
+  \Choice{CryptographyApp}{密码技术应用}\quad
   \Choice{OtherCategory}{其它}%
 }
 \newcommand{\TemplateHint}[1]{%
