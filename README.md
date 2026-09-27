@@ -14,7 +14,7 @@
 ## 预览
 
 <div align="center">
-  <img src="imgs/preview.png" width="700" alt="模板首页预览">
+  <img src="imgs/preview-2025.png" width="850" alt="模板首页预览">
 </div>
 
 ## 使用
