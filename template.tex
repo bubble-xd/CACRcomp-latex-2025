@@ -1,5 +1,5 @@
 % !TeX program = xelatex
-% 2025 年第十届全国密码技术竞赛作品设计报告 LaTeX 模板
+% 2026 年第十一届全国密码技术竞赛作品设计报告 LaTeX 模板
 % 使用前请阅读 README.md；提交前务必关闭提示并检查匿名要求。
 
 \documentclass[UTF8,a4paper,zihao=5,fontset=none]{ctexart}
@@ -18,7 +18,7 @@
 \usepackage{tabularx}
 \usepackage{xcolor}
 
-% 2025 官方 Word 模板字体。缺失时使用可随 TeX Live/Overleaf 分发的近似字体。
+% 所附 Word 模板字体。缺失时使用可随 TeX Live/Overleaf 分发的近似字体。
 \IfFontExistsTF{Calibri}
   {\setmainfont{Calibri}}
   {\setmainfont{Carlito}}
@@ -42,14 +42,14 @@
   {\newfontfamily\HeadingLatin{TeX Gyre Termes}}
 
 % -----------------------------------------------------------------------------
-% 页面与通用样式：依据 2025 官方 Word 模板设置为 A4、四边 2 cm。
+% 页面与通用样式：依据所附 Word 模板设置为 A4、四边 2 cm。
 % -----------------------------------------------------------------------------
 \geometry{top=2cm,bottom=2cm,left=2cm,right=2cm,headheight=15pt,headsep=0.55cm}
 \hypersetup{
   hidelinks,
   pdfstartview=FitH,
   pdfauthor={},
-  pdftitle={2025年第十届全国密码技术竞赛作品设计报告}
+  pdftitle={2026年第十一届全国密码技术竞赛作品设计报告}
 }
 \setlength{\parindent}{2em}
 \setlength{\parskip}{0pt}
@@ -95,9 +95,9 @@
 % -----------------------------------------------------------------------------
 % 只需修改本区内容
 % -----------------------------------------------------------------------------
-\newcommand{\WorkNumber}{CACR2025XXXXXX}
+\newcommand{\WorkNumber}{填写系统分配的编号}
 \newcommand{\WorkTitle}{作品题目}
-\newcommand{\ReportDate}{2025年\quad 月\quad 日}
+\newcommand{\ReportDate}{2026年\quad 月\quad 日}
 \newcommand{\WorkAbstract}{请在此填写作品内容摘要。}
 \newcommand{\WorkKeywords}{关键词一；关键词二；关键词三；关键词四；关键词五}
 
@@ -114,7 +114,8 @@
 % -----------------------------------------------------------------------------
 % 内部命令，一般无需修改
 % -----------------------------------------------------------------------------
-\newcommand{\CheckedBox}{\makebox[1.35em][l]{\rlap{$\square$}\hspace{-0.04em}\raisebox{-0.12em}{\fontsize{16pt}{16pt}\selectfont\ding{52}}}}
+% 勾号略小于方框，避免覆盖边框；两处类别栏共用同一尺寸。
+\newcommand{\CheckedBox}{\makebox[1.35em][l]{\rlap{$\square$}\hspace{0.18em}\raisebox{0.03em}{\fontsize{9pt}{9pt}\selectfont\ding{51}}}}
 \newcommand{\EmptyBox}{\makebox[1.35em][l]{$\square$}}
 \newcommand{\Choice}[2]{\csname if#1\endcsname\CheckedBox\else\EmptyBox\fi #2}
 \newcommand{\CategoryLine}{%
@@ -165,20 +166,22 @@
   \vspace*{4.0cm}
 
   \begin{center}
-    {\OfficialKai\bfseries\fontsize{18pt}{27pt}\selectfont 2025年第十届全国密码技术竞赛\\[0.5em]作品设计报告\par}
+    {\OfficialKai\bfseries\fontsize{18pt}{27pt}\selectfont 2026年第十一届全国密码技术竞赛\\[0.5em]作品设计报告\par}
 
     \vspace{2.2cm}
     {\OfficialKai\zihao{4} 作品题目：\underline{\makebox[10.5cm][c]{\WorkTitle}}\par}
   \end{center}
 
-  \vspace{1.8cm}
-  \noindent\hspace*{2em}
-  \parbox{\dimexpr\textwidth-4em\relax}{%
-    \OfficialKai\bfseries\fontsize{14pt}{24pt}\selectfont
-    注意：作品为匿名评审，作品设计报告封面和内容中严禁出现单位名称、
-    指导老师姓名或团队成员姓名，违者将被取消参赛资格。提交作品时请将
-    此段落文字删除。
-  }
+  \ifTemplateHints
+    \vspace{1.8cm}
+    \noindent\hspace*{2em}
+    \parbox{\dimexpr\textwidth-4em\relax}{%
+      \OfficialKai\bfseries\fontsize{14pt}{24pt}\selectfont
+      注意：复赛作品采用匿名评审，作品设计报告中严禁出现单位名称
+      （含简称）、领队老师、指导老师或团队成员信息，违者将被取消
+      复赛资格。提交作品时请将此段落文字删除。
+    }
+  \fi
 
   \vfill
   \begin{center}
@@ -207,12 +210,14 @@
   \hline
   \textbf{作品类别：}\CategoryLine\tabularnewline
   \hline
-  \rule{0pt}{8.2cm}\textbf{作品内容摘要：}\par
-  \vspace{0.5em}\WorkAbstract\par
+  \begin{minipage}[t][8.2cm][t]{\linewidth}
+    \textbf{作品内容摘要：}\par\vspace{0.5em}\WorkAbstract
+  \end{minipage}
   \tabularnewline
   \hline
-  \rule{0pt}{2.2cm}\textbf{关键词（五个）：}\par
-  \vspace{0.5em}\WorkKeywords\par
+  \begin{minipage}[t][2.2cm][t]{\linewidth}
+    \textbf{关键词（五个）：}\par\vspace{0.5em}\WorkKeywords
+  \end{minipage}
   \tabularnewline
   \hline
 \end{tabularx}
@@ -221,7 +226,7 @@
 \clearpage
 
 % -----------------------------------------------------------------------------
-% 正文。以下标题来自 2025 官方 Word 模板，可按作品实际情况适当增删。
+% 正文标题沿用所附 Word 模板，可按作品实际情况适当增删。
 % -----------------------------------------------------------------------------
 \section{作品功能与性能说明}
 \TemplateHint{说明作品解决的问题、主要功能、使用对象、运行环境与关键性能。}
@@ -261,7 +266,7 @@
   \vfill
   {\color{black}\OfficialKai\fontsize{12pt}{24pt}\selectfont
   注意：以上一级标题和二级标题供参考，参赛团队可以根据作品实际情况适当增删。
-  正式提交前请设置 \texttt{\string\TemplateHintsfalse}，并删除封面匿名提醒文字。}
+  正式提交前请设置 \texttt{\string\TemplateHintsfalse}，以隐藏所有模板提示。}
 \fi
 
 % 如需参考文献，可取消以下注释并按需扩展。
