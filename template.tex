@@ -1,278 +1,199 @@
-% !TeX program = xelatex
-% 2026 年第十一届全国密码技术竞赛作品设计报告 LaTeX 模板
-% 使用前请阅读 README.md；提交前务必关闭提示并检查匿名要求。
+\documentclass[UTF8,a4paper,zihao=-4]{ctexart}
 
-\documentclass[UTF8,a4paper,zihao=5,fontset=none]{ctexart}
+% 2026 第十一届全国密码技术竞赛作品设计报告 LaTeX 模板
+% 编译方式：latexmk -xelatex -interaction=nonstopmode -halt-on-error template.tex
 
-\usepackage{amsmath,amssymb}
-\usepackage{array}
-\usepackage{booktabs}
-\usepackage{enumitem}
-\usepackage{fancyhdr}
+\usepackage[top=2cm,bottom=2cm,left=2cm,right=2cm,
+            headheight=15pt,headsep=1.5pt,footskip=24pt]{geometry}
 \usepackage{fontspec}
-\usepackage{geometry}
+\usepackage{xeCJK}
 \usepackage{graphicx}
-\usepackage{hyperref}
-\usepackage{listings}
-\usepackage{pifont}
+\usepackage{array}
 \usepackage{tabularx}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{listings}
 \usepackage{xcolor}
+\usepackage{etoolbox}
+\usepackage{hyperref}
 
-% 所附 Word 模板字体。缺失时使用可随 TeX Live/Overleaf 分发的近似字体。
-\IfFontExistsTF{Calibri}
-  {\setmainfont{Calibri}}
-  {\setmainfont{Carlito}}
-\IfFontExistsTF{SimSun}
-  {\setCJKmainfont{SimSun}[BoldFont=SimHei]}
-  {\setCJKmainfont{FandolSong-Regular}[BoldFont=FandolSong-Bold]}
-\IfFontExistsTF{FangSong}
-  {\setCJKmonofont{FangSong}}
-  {\setCJKmonofont{FandolFang-Regular}}
-\IfFontExistsTF{STKaiti}
-  {\newCJKfontfamily\HeadingOneFont{STKaiti}}
-  {\newCJKfontfamily\HeadingOneFont{FandolKai-Regular}}
-\IfFontExistsTF{SimHei}
-  {\newCJKfontfamily\HeadingTwoFont{SimHei}}
-  {\newCJKfontfamily\HeadingTwoFont{FandolHei-Regular}}
-\IfFontExistsTF{KaiTi}
-  {\newCJKfontfamily\OfficialKai{KaiTi}[AutoFakeBold=2]}
-  {\newCJKfontfamily\OfficialKai{FandolKai-Regular}[AutoFakeBold=2]}
-\IfFontExistsTF{Times New Roman}
-  {\newfontfamily\HeadingLatin{Times New Roman}}
-  {\newfontfamily\HeadingLatin{TeX Gyre Termes}}
+% ---------- 字体 ----------
+% 与 Word 模板对应：楷体、华文楷体、黑体、宋体。
+\setCJKmainfont[AutoFakeBold=2]{KaiTi}
+\setmainfont{Times New Roman}
+\newCJKfontfamily\coverfont[AutoFakeBold=2]{STKaiti}
+\newCJKfontfamily\heifont[AutoFakeBold=2]{SimHei}
+\newCJKfontfamily\songfont{SimSun}
 
-% -----------------------------------------------------------------------------
-% 页面与通用样式：依据所附 Word 模板设置为 A4、四边 2 cm。
-% -----------------------------------------------------------------------------
-\geometry{top=2cm,bottom=2cm,left=2cm,right=2cm,headheight=15pt,headsep=0.55cm}
-\hypersetup{
-  hidelinks,
-  pdfstartview=FitH,
-  pdfauthor={},
-  pdftitle={2026年第十一届全国密码技术竞赛作品设计报告}
-}
+% ---------- 作品信息：仅需修改本区域 ----------
+\newcommand{\WorkNumber}{}
+\newcommand{\WorkTitle}{}
+\newcommand{\WorkDate}{\hspace{1.5em}年\hspace{1.5em}月\hspace{1.5em}日}
+% 可选值：软件设计、硬件制作、工程实践、密码应用技术、其它；留空则全部不勾选。
+\newcommand{\SelectedCategory}{}
+\newcommand{\WorkAbstract}{}
+\newcommand{\WorkKeywords}{}
+
+% ---------- 通用格式 ----------
+\hypersetup{hidelinks,pdfstartview=FitH}
 \setlength{\parindent}{2em}
 \setlength{\parskip}{0pt}
 \linespread{1.5}
 \setlist{nosep,leftmargin=2em}
+\captionsetup{font=small,labelsep=quad}
 
-\definecolor{TemplateGray}{HTML}{666666}
-\definecolor{CodeBackground}{HTML}{F6F8FA}
-\definecolor{CodeFrame}{HTML}{D0D7DE}
+\newcommand{\emptybox}{$\square$}
+\newcommand{\checkedbox}{$\boxtimes$}
+\newcommand{\categorybox}[1]{%
+  \ifdefstring{\SelectedCategory}{#1}{\checkedbox}{\emptybox}#1}
+% 空白模板项之间的占位间距；数值按官方 PDF 的分页位置校准。
+\newcommand{\templategap}{\mbox{}\par\vspace{0.1cm}}
 
-\ctexset{
-  section={
-    name={,},
-    number=\arabic{section},
-    aftername={.},
-    format=\raggedright\HeadingOneFont\fontsize{15pt}{22.5pt}\selectfont,
-    beforeskip=1.2ex,
-    afterskip=1.2ex
-  },
-  subsection={
-    name={,},
-    number=\thesection.\arabic{subsection},
-    aftername={\quad},
-    format=\raggedright\HeadingLatin\HeadingTwoFont\fontsize{14pt}{21pt}\selectfont,
-    beforeskip=1ex,
-    afterskip=0.8ex
-  }
-}
-
-\lstset{
-  basicstyle=\small\ttfamily,
-  backgroundcolor=\color{CodeBackground},
-  frame=single,
-  rulecolor=\color{CodeFrame},
-  numbers=left,
-  numberstyle=\tiny\color{TemplateGray},
-  breaklines=true,
-  showstringspaces=false,
-  tabsize=2,
-  columns=fullflexible
-}
-
-% -----------------------------------------------------------------------------
-% 只需修改本区内容
-% -----------------------------------------------------------------------------
-\newcommand{\WorkNumber}{填写系统分配的编号}
-\newcommand{\WorkTitle}{作品题目}
-\newcommand{\ReportDate}{2026年\quad 月\quad 日}
-\newcommand{\WorkAbstract}{请在此填写作品内容摘要。}
-\newcommand{\WorkKeywords}{关键词一；关键词二；关键词三；关键词四；关键词五}
-
-% 作品类别：将所选类别改为 true，其余保持 false。
-\newif\ifSoftwareDesign      \SoftwareDesigntrue
-\newif\ifHardwareProduction \HardwareProductionfalse
-\newif\ifEngineeringPractice\EngineeringPracticefalse
-\newif\ifCryptographyApp     \CryptographyAppfalse
-\newif\ifOtherCategory       \OtherCategoryfalse
-
-% 模板提示默认显示；正式提交前改为 \TemplateHintsfalse。
-\newif\ifTemplateHints       \TemplateHintstrue
-
-% -----------------------------------------------------------------------------
-% 内部命令，一般无需修改
-% -----------------------------------------------------------------------------
-% 勾号略小于方框，避免覆盖边框；两处类别栏共用同一尺寸。
-\newcommand{\CheckedBox}{\makebox[1.35em][l]{\rlap{$\square$}\hspace{0.10em}\raisebox{0.02em}{\fontsize{11pt}{11pt}\selectfont\ding{51}}}}
-\newcommand{\EmptyBox}{\makebox[1.35em][l]{$\square$}}
-\newcommand{\Choice}[2]{\csname if#1\endcsname\CheckedBox\else\EmptyBox\fi #2}
-\newcommand{\CategoryLine}{%
-  \Choice{SoftwareDesign}{软件设计}\quad
-  \Choice{HardwareProduction}{硬件制作}\quad
-  \Choice{EngineeringPractice}{工程实践}\quad
-  \Choice{CryptographyApp}{密码技术应用}\quad
-  \Choice{OtherCategory}{其它}%
-}
-\newcommand{\TemplateHint}[1]{%
-  \ifTemplateHints
-    \par{\OfficialKai\fontsize{14pt}{24pt}\selectfont\color{black}#1}\par
-  \fi
-}
-
-\fancypagestyle{reportstyle}{
+% 正文页眉、页脚与 Word 模板一致。
+\fancypagestyle{mainstyle}{%
   \fancyhf{}
-  \fancyhead[C]{\zihao{-5} 全国密码技术竞赛作品设计报告}
-  \fancyfoot[C]{\zihao{-5}\thepage}
-  \renewcommand{\headrulewidth}{0.4pt}
+  \fancyhead[C]{{\songfont\zihao{-5} 全国密码技术竞赛作品设计报告}}
+  \fancyfoot[C]{\raisebox{6.7mm}[0pt][0pt]{\fontsize{9pt}{10pt}\selectfont\thepage}}
+  \fancyheadoffset[L,R]{0.53mm}
+  \renewcommand{\headrulewidth}{0.75pt}
   \renewcommand{\footrulewidth}{0pt}
 }
 
+% 一级标题：15 pt 华文楷体；二级标题：14 pt 黑体。
+\titleformat{\section}
+  {\coverfont\bfseries\fontsize{15pt}{22.5pt}\selectfont}
+  {\thesection.}{0pt}{}
+\titlespacing*{\section}{0pt}{12pt}{12pt}
+\titleformat{\subsection}
+  {\heifont\bfseries\fontsize{14pt}{21pt}\selectfont}
+  {\thesubsection}{0.7em}{}
+\titlespacing*{\subsection}{0pt}{12pt}{12pt}
+\setcounter{secnumdepth}{2}
+
+\lstset{
+  basicstyle=\small\ttfamily,
+  frame=single,
+  breaklines=true,
+  columns=fullflexible,
+  showstringspaces=false
+}
+
+% 固定高度的基本信息表单元格。
+\newcommand{\formcell}[2]{%
+  \parbox[t][#1][t]{\dimexpr\linewidth-2\tabcolsep\relax}{\vspace{-0.35em}#2}}
+
 \begin{document}
 
-% -----------------------------------------------------------------------------
-% 封面
-% -----------------------------------------------------------------------------
+% ==================== 封面 ====================
 \hypersetup{pageanchor=false}
-\begin{titlepage}
-  \thispagestyle{empty}
-  \noindent
-  \begin{minipage}[t]{0.70\textwidth}
-    \OfficialKai\zihao{4}
-    作品编号：\WorkNumber\\[0.75em]
-    作品类别：\Choice{SoftwareDesign}{软件设计}\quad
-              \Choice{HardwareProduction}{硬件制作}\quad
-              \Choice{EngineeringPractice}{工程实践}\\[0.35em]
-    \hspace*{5em}\Choice{CryptographyApp}{密码应用技术}\quad
-              \Choice{OtherCategory}{其它}
-  \end{minipage}
-  \hfill
-  \begin{minipage}[t]{0.22\textwidth}
-    \raggedleft\vspace{-0.4cm}
-    \includegraphics[width=3.2cm]{imgs/logo.png}
-  \end{minipage}
+\thispagestyle{empty}
+\noindent
+\setlength{\unitlength}{1mm}
+\begin{picture}(169.3,257)
+  \put(0,252.9){\makebox(0,0)[l]{\fontsize{14pt}{24pt}\selectfont 作品编号：}}
+  \put(23.5,251.6){\makebox(83,0)[l]{\scalebox{1.095}{\color{red}\bfseries\fontsize{14pt}{24pt}\selectfont
+    \ifdefempty{\WorkNumber}{（必须填写系统自动分配的编号）}{\WorkNumber}}}}
+  \put(24,249.6){\line(1,0){81.8}}
 
-  \vspace*{4.0cm}
+  \put(0,234){\makebox(0,0)[l]{\fontsize{14pt}{24pt}\selectfont 作品类别：}}
+  \put(27,234){\makebox(0,0)[l]{\fontsize{11pt}{20pt}\selectfont
+    \categorybox{软件设计}\quad\categorybox{硬件制作}\quad\categorybox{工程实践}}}
+  \put(27,225){\makebox(0,0)[l]{\fontsize{11pt}{20pt}\selectfont
+    \categorybox{密码应用技术}\quad\categorybox{其它}}}
 
-  \begin{center}
-    {\OfficialKai\bfseries\fontsize{18pt}{27pt}\selectfont 2026年第十一届全国密码技术竞赛\\[0.5em]作品设计报告\par}
+  \put(126,232){\includegraphics[width=42.7mm,height=32.3mm,keepaspectratio]{imgs/logo-2026.jpeg}}
 
-    \vspace{2.2cm}
-    {\OfficialKai\zihao{4} 作品题目：\underline{\makebox[10.5cm][c]{\WorkTitle}}\par}
-  \end{center}
+  \put(15,169){\makebox(140,0)[c]{\coverfont\bfseries\fontsize{18pt}{27pt}\selectfont
+    2026年第十一届全国密码技术竞赛作品设计报告}}
+  \put(15,158){\rule{140mm}{1.2pt}}
 
-  \ifTemplateHints
-    \vspace{1.8cm}
-    \noindent\hspace*{2em}
-    \parbox{\dimexpr\textwidth-4em\relax}{%
-      \OfficialKai\bfseries\fontsize{14pt}{24pt}\selectfont
-      注意：复赛作品采用匿名评审，作品设计报告中严禁出现单位名称
-      （含简称）、领队老师、指导老师或团队成员信息，违者将被取消
-      复赛资格。提交作品时请将此段落文字删除。
-    }
-  \fi
+  \put(30,132){\makebox(0,0)[l]{\fontsize{14pt}{25pt}\selectfont 作品题目：}}
+  \put(61,130.5){\line(1,0){90}}
+  \put(62,132){\makebox(88,0)[c]{\fontsize{14pt}{25pt}\selectfont \WorkTitle}}
 
-  \vfill
-  \begin{center}
-    {\OfficialKai\zihao{4} \ReportDate\par}
-    \vspace{0.65em}
-    {\OfficialKai\zihao{4} 中国密码学会\par}
-  \end{center}
-\end{titlepage}
+  \put(0,108){\parbox[t]{166mm}{\coverfont\bfseries\fontsize{14pt}{24pt}\selectfont
+    \hspace{2em}注意：作品为匿名评审，作品设计报告封面和内容中严禁出现单位名称、
+    指导老师姓名或团队成员姓名，违者将被取消参赛资格。提交作品时请将此段落文字删除。}}
+
+  \put(0,45){\makebox(170,0)[c]{\fontsize{14pt}{24pt}\selectfont \WorkDate}}
+  \put(0,34){\makebox(170,0)[c]{\fontsize{14pt}{24pt}\selectfont 中国密码学会}}
+\end{picture}
+
+% ==================== 基本信息表 ====================
+\clearpage
 \hypersetup{pageanchor=true}
-
-% -----------------------------------------------------------------------------
-% 基本信息表
-% -----------------------------------------------------------------------------
-\pagestyle{reportstyle}
+\pagestyle{mainstyle}
 \setcounter{page}{1}
-
+\thispagestyle{mainstyle}
+\vspace*{-2.05em}
 \begin{center}
-\renewcommand{\arraystretch}{1.55}
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|}
-  \hline
-  \centering\bfseries\zihao{3} 基本信息表\tabularnewline
-  \hline
-  \textbf{编号：}\WorkNumber\tabularnewline
-  \hline
-  \textbf{作品题目：}\WorkTitle\tabularnewline
-  \hline
-  \textbf{作品类别：}\CategoryLine\tabularnewline
-  \hline
-  \begin{minipage}[t][8.2cm][t]{\linewidth}
-    \textbf{作品内容摘要：}\par\vspace{0.5em}\WorkAbstract
-  \end{minipage}
-  \tabularnewline
-  \hline
-  \begin{minipage}[t][2.2cm][t]{\linewidth}
-    \textbf{关键词（五个）：}\par\vspace{0.5em}\WorkKeywords
-  \end{minipage}
-  \tabularnewline
-  \hline
-\end{tabularx}
+\renewcommand{\arraystretch}{1}
+\setlength{\tabcolsep}{2mm}
+\begin{tabular}{|p{15.32cm}|}
+\hline
+\formcell{0.55cm}{\centering\fontsize{15pt}{22.5pt}\selectfont 基本信息表}\\ \hline
+\formcell{0.57cm}{\fontsize{15pt}{22.5pt}\selectfont 编号：\WorkNumber}\\ \hline
+\formcell{0.57cm}{\fontsize{15pt}{22.5pt}\selectfont 作品题目：\WorkTitle}\\ \hline
+\formcell{0.48cm}{\fontsize{15pt}{22.5pt}\selectfont 作品类别：\quad
+  \fontsize{11pt}{18pt}\selectfont
+  \categorybox{软件设计}\quad\categorybox{硬件制作}\quad\categorybox{工程实践}\quad
+  \categorybox{密码应用技术}\quad\categorybox{其它}}\\ \hline
+\formcell{16.23cm}{\fontsize{15pt}{22.5pt}\selectfont 作品内容摘要：\\[0.5em]
+  \fontsize{14pt}{24pt}\selectfont \WorkAbstract}\\ \hline
+\formcell{2.20cm}{\fontsize{15pt}{22.5pt}\selectfont 关键词（五个）：\\[0.35em]
+  \fontsize{14pt}{24pt}\selectfont \WorkKeywords}\\ \hline
+\end{tabular}
 \end{center}
 
+% ==================== 正文 ====================
 \clearpage
-
-% -----------------------------------------------------------------------------
-% 正文标题沿用所附 Word 模板，可按作品实际情况适当增删。
-% -----------------------------------------------------------------------------
+% 抵消页首标题机制引入的额外空白，使正文首行与官方 PDF 对齐。
+\vspace*{-9mm}
 \section{作品功能与性能说明}
-\TemplateHint{说明作品解决的问题、主要功能、使用对象、运行环境与关键性能。}
+% 在此填写作品功能、性能和创新点。
+\templategap
 
 \section{设计与实现方案}
+\templategap
 
 \subsection{实现原理}
-\TemplateHint{可插入硬件框图、软件流程图、系统架构图及相关说明。}
+（硬件框图、软件流程、相关描述等）
+\mbox{}\par\vspace{0.7cm}
 
 \subsection{运行结果}
-\TemplateHint{展示系统界面、核心流程、代表性输出及必要说明。}
+\templategap
 
 \subsection{技术指标}
-\TemplateHint{给出可验证的功能、性能、安全性或资源消耗指标。}
+\templategap
 
 \section{系统测试与结果}
+\templategap
 
 \subsection{测试方案}
-\TemplateHint{说明测试环境、软硬件配置、数据、变量、基线与评价方法。}
+\templategap
 
 \subsection{功能测试}
-\TemplateHint{按功能项说明测试步骤、预期结果与实际结果。}
+\templategap
 
+% 官方模板在此处换页。
+\clearpage
 \subsection{性能测试}
-\TemplateHint{报告吞吐率、时延、资源占用等与作品相关的性能结果。}
+\templategap
 
 \subsection{测试数据与结果}
-\TemplateHint{建议使用清晰的表格或图形汇总数据，并解释结果。}
+\templategap
 
 \section{应用前景}
-\TemplateHint{说明适用场景、推广条件、现实价值与后续改进方向。}
+\templategap
 
 \section{结论}
-\TemplateHint{总结作品实现内容、验证结果、主要贡献与当前局限。}
+\vspace{1.9cm}
 
-\ifTemplateHints
-  \vfill
-  {\color{black}\OfficialKai\fontsize{12pt}{24pt}\selectfont
-  注意：以上一级标题和二级标题供参考，参赛团队可以根据作品实际情况适当增删。
-  正式提交前请设置 \texttt{\string\TemplateHintsfalse}，以隐藏所有模板提示。}
-\fi
-
-% 如需参考文献，可取消以下注释并按需扩展。
-% \clearpage
-% \begin{thebibliography}{99}
-%   \bibitem{example} 作者. 文献题目[J]. 期刊, 年份, 卷(期): 页码.
-% \end{thebibliography}
+{\fontsize{12pt}{24pt}\selectfont
+注意：这里列出的一级标题和二级标题供参考，参赛团队可以根据作品实际情况适当增删一级标题和二级标题。}
 
 \end{document}

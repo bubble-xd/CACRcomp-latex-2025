@@ -1,17 +1,10 @@
+# LaTeX 编译生成的辅助文件
 *.aux
-*.bbl
-*.bcf
-*.blg
 *.fdb_latexmk
 *.fls
 *.log
 *.out
-*.run.xml
 *.synctex.gz
+*.synctex(busy)
 *.toc
 *.xdv
-_minted-*/
-.DS_Store
-Thumbs.db
-.texlive-cache/
-.qa-pdf/
