@@ -32,6 +32,7 @@
 \setmainfont[Path=fonts/,BoldFont=timesbd.ttf,
   ItalicFont=timesi.ttf,BoldItalicFont=timesbi.ttf]{times.ttf}
 \newCJKfontfamily\coverfont[Path=fonts/,AutoFakeBold=2]{STKAITI.TTF}
+\newfontfamily\headinglatinfont[Path=fonts/,AutoFakeBold=2]{STKAITI.TTF}
 \newCJKfontfamily\heifont[Path=fonts/,AutoFakeBold=2]{simhei.ttf}
 \newCJKfontfamily\songfont[Path=fonts/,FontIndex=0]{simsun.ttc}
 
@@ -53,9 +54,12 @@
 % Word 的“四号”为 14 磅；使用 bp 对齐 Word 的字号及固定行距。
 \let\TemplateOriginalNormalSize\normalsize
 \renewcommand{\normalsize}{\TemplateOriginalNormalSize\fontsize{14bp}{24bp}\selectfont}
-\AtBeginDocument{\normalsize}
+% 页首第一行使用独立基线位置，避免大字号正文贴到页眉横线。
+\AtBeginDocument{\normalsize\setlength{\topskip}{30bp}}
 \setlist{nosep,leftmargin=2em}
 \captionsetup{font=small,labelsep=quad}
+% 表题置于表格上方，与表格上横线保持 4 磅间距。
+\captionsetup*[table]{position=above,skip=4bp}
 % 标准横线式算法：标题置顶、步骤编号、输入与输出。
 \floatname{algorithm}{算法}
 \numberwithin{algorithm}{section}
@@ -72,7 +76,12 @@
 \makeatother
 \floatstyle{reportalgorithm}
 \restylefloat{algorithm}
-\AtBeginEnvironment{table}{\vspace{6bp}}
+% 留白放在浮动表格盒子内，使表格移到页首后仍与页眉分离。
+\makeatletter
+\apptocmd{\@floatboxreset}{%
+  \ifdefstring{\@captype}{table}{\vspace*{16bp}}{}%
+}{}{\PackageError{cacr-template}{Unable to set table top spacing}{}}
+\makeatother
 
 \newcommand{\emptybox}{\makebox[1em][l]{$\square$}}
 \newcommand{\checkedbox}{\makebox[1em][l]{%
@@ -100,13 +109,22 @@
 
 % 一级标题：15 pt 华文楷体；二级标题：14 pt 黑体。
 \titleformat{\section}
-  {\coverfont\bfseries\fontsize{15bp}{22.5bp}\selectfont}
+  {\headinglatinfont\coverfont\bfseries\fontsize{15bp}{22.5bp}\selectfont}
   {\thesection.}{0pt}{}
 \titlespacing*{\section}{0pt}{12pt}{12pt}
 \titleformat{\subsection}
   {\heifont\bfseries\fontsize{14bp}{21bp}\selectfont}
   {\thesubsection}{0.7em}{}
 \titlespacing*{\subsection}{0pt}{12pt}{12pt}
+% 目录标题：二号黑体居中；目录条目仍使用原有两级结构。
+\newcommand{\ReportTableOfContents}{%
+  \begingroup
+  \renewcommand{\contentsname}{目\quad 录}%
+  \titleformat{\section}{\centering\heifont\bfseries\fontsize{22bp}{30bp}\selectfont}{}{0pt}{}%
+  \titlespacing*{\section}{0pt}{12bp}{18bp}%
+  \tableofcontents
+  \endgroup}
+
 \setcounter{secnumdepth}{2}
 
 \lstset{
@@ -209,8 +227,6 @@
 
 % ==================== 正文 ====================
 \clearpage
-% 调整空白模板的正文页首位置。
-\vspace*{-9mm}
 \section{作品功能与性能说明}
 % 在此填写作品功能、性能和创新点。
 \templategap
