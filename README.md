@@ -27,7 +27,7 @@
 - `SimSun`（宋体）；
 - `Times New Roman`。
 
-Windows 通常已安装这些字体。在其他操作系统中使用时，需要安装对应字体，或在 `template.tex` 的字体设置区域替换为可用字体。
+模板直接读取项目内 `fonts/` 字体文件，不依赖操作系统安装字体。
 
 ## 使用方法
 
@@ -69,10 +69,23 @@ latexmk -xelatex -gg -interaction=nonstopmode -halt-on-error template.tex
 
 编译完成后生成 `template.pdf`。
 
+## 在 Overleaf 中使用
+
+1. 在 GitHub 仓库点击 **Code → Download ZIP**，下载完整项目。
+2. 在 Overleaf 点击 **新建项目 → 上传项目**，选择刚下载的 ZIP。
+3. 将主文档设为 `template.tex`，编译器选为 **XeLaTeX**，点击重新编译。
+
+项目包含 `fonts/` 字体文件，模板已按文件路径加载，无需逐个上传字体或修改字体代码。填写作品信息后即可继续撰写正文。
+
+若更新已有 Overleaf 项目，请同时替换 `template.tex` 和整个 `fonts/` 文件夹；出现旧的字体错误时，可清除缓存后重新编译。
+
+[Overleaf 官方 ZIP 项目上传说明](https://docs.overleaf.com/managing-projects-and-files/uploading-a-project)
+
 ## 文件结构
 
 ```text
 .
+├── fonts/               # 字体文件，随项目 ZIP 一并下载
 ├── imgs/
 │   ├── logo-2026.jpeg    # 中国密码学会标志
 │   └── preview-2026.png  # README 封面预览

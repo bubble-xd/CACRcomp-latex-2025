@@ -1,4 +1,4 @@
-\documentclass[UTF8,a4paper,zihao=-4]{ctexart}
+\documentclass[UTF8,a4paper,zihao=-4,fontset=none]{ctexart}
 
 % 2026 第十一届全国密码技术竞赛作品设计报告 LaTeX 模板
 % 编译方式：latexmk -xelatex -interaction=nonstopmode -halt-on-error template.tex
@@ -23,12 +23,13 @@
 \usepackage{hyperref}
 
 % ---------- 字体 ----------
-% 与 Word 模板对应：楷体、华文楷体、黑体、宋体。
-\setCJKmainfont[AutoFakeBold=2]{KaiTi}
-\setmainfont{Times New Roman}
-\newCJKfontfamily\coverfont[AutoFakeBold=2]{STKaiti}
-\newCJKfontfamily\heifont[AutoFakeBold=2]{SimHei}
-\newCJKfontfamily\songfont{SimSun}
+% 直接加载项目内字体，下载 ZIP 后可在 Overleaf 使用。
+\setCJKmainfont[Path=fonts/,AutoFakeBold=2]{simkai.ttf}
+\setmainfont[Path=fonts/,BoldFont=timesbd.ttf,
+  ItalicFont=timesi.ttf,BoldItalicFont=timesbi.ttf]{times.ttf}
+\newCJKfontfamily\coverfont[Path=fonts/,AutoFakeBold=2]{STKAITI.TTF}
+\newCJKfontfamily\heifont[Path=fonts/,AutoFakeBold=2]{simhei.ttf}
+\newCJKfontfamily\songfont[Path=fonts/,FontIndex=0]{simsun.ttc}
 
 % ---------- 作品信息：仅需修改本区域 ----------
 \newcommand{\WorkNumber}{}
