@@ -59,7 +59,8 @@
 \setlist{nosep,leftmargin=2em}
 \captionsetup{font=small,labelsep=quad}
 % 表题置于表格上方，与表格上横线保持 4 磅间距。
-\captionsetup*[table]{position=above,skip=4bp}
+\DeclareCaptionFont{tablefont}{\fontsize{12bp}{16bp}\selectfont}
+\captionsetup*[table]{font=tablefont,position=above,skip=4bp}
 % 标准横线式算法：标题置顶、步骤编号、输入与输出。
 \floatname{algorithm}{算法}
 \numberwithin{algorithm}{section}
