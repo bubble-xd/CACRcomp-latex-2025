@@ -4,7 +4,7 @@
 % 编译方式：latexmk -xelatex -interaction=nonstopmode -halt-on-error template.tex
 
 \usepackage[top=2cm,bottom=2cm,left=2cm,right=2cm,
-            headheight=15pt,headsep=1.5pt,footskip=24pt]{geometry}
+            headheight=13pt,headsep=6pt,footskip=24pt]{geometry}
 \usepackage{fontspec}
 \usepackage{xeCJK}
 \usepackage{graphicx}
@@ -58,13 +58,17 @@
 % 空白模板项之间的占位间距；填写正文时可删除。
 \newcommand{\templategap}{\mbox{}\par\vspace{0.1cm}}
 
-% 正文页眉、页脚与 Word 模板一致。
+% 页眉为宋体小五（9 pt）、12 pt 行距、灰色；文字至横线 1 pt，横线至正文区域 6 pt。
+\definecolor{HeaderGray}{HTML}{808080}
 \fancypagestyle{mainstyle}{%
   \fancyhf{}
-  \fancyhead[C]{{\songfont\zihao{-5} 全国密码技术竞赛作品设计报告}}
+  \fancyheadinit{\normalfont\songfont\fontsize{9pt}{12pt}\selectfont}
+  \renewcommand{\headruleskip}{1pt}
+  \fancyhead[C]{{\normalfont\songfont\fontsize{9pt}{12pt}\selectfont\color{HeaderGray}全国密码技术竞赛作品设计报告}}
   \fancyfoot[C]{\raisebox{6.7mm}[0pt][0pt]{\fontsize{9pt}{10pt}\selectfont\thepage}}
   \fancyheadoffset[L,R]{0.53mm}
   \renewcommand{\headrulewidth}{0.75pt}
+  \renewcommand{\headrule}{\begingroup\color{HeaderGray}\hrule height\headrulewidth width\headwidth\vskip-\headrulewidth\endgroup}
   \renewcommand{\footrulewidth}{0pt}
 }
 
@@ -91,6 +95,16 @@
 \newcommand{\formcell}[2]{%
   \parbox[t][#1][t]{\linewidth}{\vspace{-0.35em}#2}}
 
+% Filled titles align above the underline; only long titles shrink to fit.
+\newsavebox{\CoverTitleBox}
+\newcommand{\CoverTitleText}{%
+  \sbox{\CoverTitleBox}{\fontsize{14pt}{25pt}\selectfont\WorkTitle}%
+  \ifdim\wd\CoverTitleBox>91mm
+    \resizebox{91mm}{!}{\usebox{\CoverTitleBox}}%
+  \else
+    \usebox{\CoverTitleBox}%
+  \fi}
+
 \begin{document}
 
 % ==================== 封面 ====================
@@ -114,11 +128,11 @@
 
   \put(15,169){\makebox(140,0)[c]{\bfseries\fontsize{18pt}{24pt}\selectfont
     2026年第十一届全国密码技术竞赛作品设计报告}}
-  \put(15,158){\rule{140mm}{1.2pt}}
+  \put(15,158){\rule{140mm}{3pt}}
 
-  \put(30,132){\makebox(0,0)[l]{\fontsize{14pt}{25pt}\selectfont 作品题目：}}
-  \put(54,130.5){\rule{97mm}{0.3pt}}
-  \put(55,132){\makebox(95,0)[c]{\fontsize{14pt}{25pt}\selectfont \WorkTitle}}
+  \put(30,132){\makebox(0,0)[lb]{\fontsize{14pt}{25pt}\selectfont 作品题目：}}
+  \put(54,130.5){\rule{97mm}{0.5pt}}
+  \put(59,132){\makebox(91,0)[lb]{\CoverTitleText}}
 
   \put(0,108){\parbox[t]{166mm}{\bfseries\fontsize{14pt}{24pt}\selectfont
     \hspace{2em}注意：作品为匿名评审，作品设计报告封面和内容中严禁出现单位名称、
