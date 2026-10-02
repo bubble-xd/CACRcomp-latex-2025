@@ -1,10 +1,10 @@
 # 2026 第十一届全国密码技术竞赛作品设计报告 LaTeX 模板
 
-本项目依据官方提供的《附件二——作品设计报告（模板）》Word 文件制作，并将年份及届次更新为 2026 年第十一届，使用 XeLaTeX 编译。
+本项目依据 2026 年第十一届全国密码技术竞赛官方提供的《附件二——作品设计报告（模板）》Word 文件制作，使用 XeLaTeX 编译。
 
 [查看模板编译效果](template.pdf)
 
-![模板封面预览](imgs/preview-2026-cover-v5.png)
+![模板封面预览](imgs/preview-2026-cover-v6.png)
 
 ## 模板特性
 
@@ -41,7 +41,7 @@
 \newcommand{\WorkNumber}{系统分配的作品编号}
 \newcommand{\WorkTitle}{作品题目}
 \newcommand{\WorkDate}{2026年10月1日}
-\newcommand{\SelectedCategory}{密码应用技术}
+\newcommand{\SelectedCategory}{密码技术应用}
 \newcommand{\WorkAbstract}{作品摘要}
 \newcommand{\WorkKeywords}{关键词一；关键词二；关键词三；关键词四；关键词五}
 ```
@@ -51,7 +51,7 @@
 - `软件设计`
 - `硬件制作`
 - `工程实践`
-- `密码应用技术`
+- `密码技术应用`
 - `其它`
 
 留空时不会勾选任何类别。正文中的一级标题和二级标题可以根据作品实际情况增删。
@@ -101,7 +101,7 @@ latexmk -xelatex -gg -interaction=nonstopmode -halt-on-error template.tex
 ├── fonts/               # 字体文件，随项目 ZIP 一并下载
 ├── imgs/
 │   ├── logo-2026.jpeg    # 中国密码学会标志
-│   └── preview-2026-cover-v5.png  # README 封面预览
+│   └── preview-2026-cover-v6.png  # README 封面预览
 ├── .gitignore
 ├── README.md
 ├── template.pdf          # 模板编译效果
@@ -115,9 +115,3 @@ latexmk -xelatex -gg -interaction=nonstopmode -halt-on-error template.tex
 3. 删除封面中的红色填写提示及匿名评审提示文字。
 4. 检查封面和正文，不得出现单位名称、指导教师姓名或团队成员姓名。
 5. 使用 XeLaTeX 完整编译，并逐页检查表格、图片、公式和分页。
-
-## 说明
-
-所提供的 Word 原件封面写作“2025 年第十届”，本项目已更新年份及届次。原件封面与信息表分别使用“密码应用技术”和“密码技术应用”，本项目统一使用“密码应用技术”。
-
-本项目用于竞赛作品设计报告排版。若竞赛官方后续发布了新版模板或补充要求，应以最新官方文件为准。
