@@ -72,7 +72,7 @@ latexmk -xelatex -gg -interaction=nonstopmode -halt-on-error template.tex
 ## 在 Overleaf 中使用
 
 1. 在 GitHub 仓库点击 **Code → Download ZIP**，下载完整项目。
-2. 在 Overleaf 点击 **新建项目 → 上传项目**，选择刚下载的 ZIP。
+2. 在 Overleaf 点击 **创建新项目**，在 **Import** 下选择 **Existing project (.zip)**，上传刚下载的 ZIP。
 3. 将主文档设为 `template.tex`，编译器选为 **XeLaTeX**，点击重新编译。
 
 [Overleaf 官方 ZIP 项目上传说明](https://docs.overleaf.com/managing-projects-and-files/uploading-a-project)
