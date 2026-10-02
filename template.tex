@@ -152,8 +152,8 @@
 \newsavebox{\CoverTitleBox}
 \newcommand{\CoverTitleText}{%
   \sbox{\CoverTitleBox}{\fontsize{14pt}{25pt}\selectfont\WorkTitle}%
-  \ifdim\wd\CoverTitleBox>91mm
-    \resizebox{91mm}{!}{\usebox{\CoverTitleBox}}%
+  \ifdim\wd\CoverTitleBox>94.5mm
+    \resizebox{94.5mm}{!}{\usebox{\CoverTitleBox}}%
   \else
     \usebox{\CoverTitleBox}%
   \fi}
@@ -186,7 +186,7 @@
 
   \put(30,132){\makebox(0,0)[lb]{\fontsize{14pt}{25pt}\selectfont 作品题目：}}
   \put(54,130.5){\rule{97mm}{0.5pt}}
-  \put(59,132){\makebox(91,0)[lb]{\CoverTitleText}}
+  \put(55.5,132){\makebox(94.5,0)[lb]{\CoverTitleText}}
 
   \put(0,108){\parbox[t]{166mm}{\bfseries\fontsize{14pt}{24pt}\selectfont
     \hspace{2em}注意：作品为匿名评审，作品设计报告封面和内容中严禁出现单位名称、
