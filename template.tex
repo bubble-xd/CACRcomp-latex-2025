@@ -4,7 +4,7 @@
 % 编译方式：latexmk -xelatex -interaction=nonstopmode -halt-on-error template.tex
 
 \usepackage[top=2cm,bottom=2cm,left=2cm,right=2cm,
-            headheight=13pt,headsep=6pt,footskip=24pt]{geometry}
+            headheight=13.1pt,headsep=\dimexpr2cm-1.5cm-13.1pt\relax,footskip=12pt]{geometry}
 \usepackage{fontspec}
 \usepackage{xeCJK}
 \usepackage{graphicx}
@@ -16,6 +16,8 @@
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
 \usepackage{caption}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{etoolbox}
@@ -24,7 +26,9 @@
 
 % ---------- 字体 ----------
 % 直接加载项目内字体，下载 ZIP 后可在 Overleaf 使用。
-\setCJKmainfont[Path=fonts/,AutoFakeBold=2]{simkai.ttf}
+\setCJKmainfont[Path=fonts/,AutoFakeBold=2]{楷体_GB2312.ttf}
+% GB2312 字体不含西文 en dash，交由 Times New Roman 排印。
+\xeCJKDeclareCharClass{Default}{"2013}
 \setmainfont[Path=fonts/,BoldFont=timesbd.ttf,
   ItalicFont=timesi.ttf,BoldItalicFont=timesbi.ttf]{times.ttf}
 \newCJKfontfamily\coverfont[Path=fonts/,AutoFakeBold=2]{STKAITI.TTF}
@@ -34,7 +38,7 @@
 % ---------- 作品信息：仅需修改本区域 ----------
 \newcommand{\WorkNumber}{}
 \newcommand{\WorkTitle}{}
-\newcommand{\WorkDate}{\hspace{1.5em}年\hspace{1.5em}月\hspace{1.5em}日}
+\newcommand{\WorkDate}{年\hspace{2em}月\hspace{2em}日}
 % 可选值：软件设计、硬件制作、工程实践、密码应用技术、其它；留空则全部不勾选。
 \newcommand{\SelectedCategory}{}
 \newcommand{\WorkAbstract}{}
@@ -46,9 +50,29 @@
 \setlength{\parskip}{0pt}
 % 固定行距不再乘全局倍率；标题的行距单独设置。
 \linespread{1}
-\AtBeginDocument{\fontsize{14pt}{24pt}\selectfont}
+% Word 的“四号”为 14 磅；使用 bp 对齐 Word 的字号及固定行距。
+\let\TemplateOriginalNormalSize\normalsize
+\renewcommand{\normalsize}{\TemplateOriginalNormalSize\fontsize{14bp}{24bp}\selectfont}
+\AtBeginDocument{\normalsize}
 \setlist{nosep,leftmargin=2em}
 \captionsetup{font=small,labelsep=quad}
+% 标准横线式算法：标题置顶、步骤编号、输入与输出。
+\floatname{algorithm}{算法}
+\numberwithin{algorithm}{section}
+\algrenewcommand{\algorithmicrequire}{\textbf{输入：}}
+\algrenewcommand{\algorithmicensure}{\textbf{输出：}}
+\algrenewcommand{\algorithmicindent}{1.5em}
+\DeclareCaptionFont{algorithmfont}{\fontsize{12bp}{16bp}\selectfont}
+\captionsetup*[algorithm]{font=algorithmfont,labelfont=bf,labelsep=quad}
+% 保留标准 ruled 样式，为页首浮动算法留出 6 磅顶端间距。
+\makeatletter
+\newcommand{\fs@reportalgorithm}{%
+  \fs@ruled
+  \def\@fs@pre{\vskip6bp\hrule height.8pt depth0pt\kern2pt}}
+\makeatother
+\floatstyle{reportalgorithm}
+\restylefloat{algorithm}
+\AtBeginEnvironment{table}{\vspace{6bp}}
 
 \newcommand{\emptybox}{\makebox[1em][l]{$\square$}}
 \newcommand{\checkedbox}{\makebox[1em][l]{%
@@ -58,14 +82,16 @@
 % 空白模板项之间的占位间距；填写正文时可删除。
 \newcommand{\templategap}{\mbox{}\par\vspace{0.1cm}}
 
-% 页眉为宋体小五（9 pt）、12 pt 行距、灰色；文字至横线 1 pt，横线至正文区域 6 pt。
+% 页眉段落上边缘距纸张顶端 1.50 cm；页脚段落下边缘距底端 1.75 cm。
+% 正文四边页边距仍为 2 cm；页眉为宋体小五、12 磅行距、灰色。
 \definecolor{HeaderGray}{HTML}{808080}
 \fancypagestyle{mainstyle}{%
   \fancyhf{}
-  \fancyheadinit{\normalfont\songfont\fontsize{9pt}{12pt}\selectfont}
+  \fancyheadinit{\normalfont\songfont\fontsize{9bp}{12bp}\selectfont}
   \renewcommand{\headruleskip}{1pt}
-  \fancyhead[C]{{\normalfont\songfont\fontsize{9pt}{12pt}\selectfont\color{HeaderGray}全国密码技术竞赛作品设计报告}}
-  \fancyfoot[C]{\raisebox{6.7mm}[0pt][0pt]{\fontsize{9pt}{10pt}\selectfont\thepage}}
+  \fancyhead[C]{{\normalfont\songfont\fontsize{9bp}{12bp}\selectfont\color{HeaderGray}全国密码技术竞赛作品设计报告}}
+  \fancyfootinit{\normalfont\fontsize{9bp}{10bp}\selectfont}
+  \fancyfoot[C]{\raisebox{\dimexpr\footskip-2cm+1.75cm+\dp\strutbox\relax}[0pt][0pt]{\fontsize{9bp}{10bp}\selectfont\thepage}}
   \fancyheadoffset[L,R]{0.53mm}
   \renewcommand{\headrulewidth}{0.75pt}
   \renewcommand{\headrule}{\begingroup\color{HeaderGray}\hrule height\headrulewidth width\headwidth\vskip-\headrulewidth\endgroup}
@@ -74,11 +100,11 @@
 
 % 一级标题：15 pt 华文楷体；二级标题：14 pt 黑体。
 \titleformat{\section}
-  {\coverfont\bfseries\fontsize{15pt}{22.5pt}\selectfont}
+  {\coverfont\bfseries\fontsize{15bp}{22.5bp}\selectfont}
   {\thesection.}{0pt}{}
 \titlespacing*{\section}{0pt}{12pt}{12pt}
 \titleformat{\subsection}
-  {\heifont\bfseries\fontsize{14pt}{21pt}\selectfont}
+  {\heifont\bfseries\fontsize{14bp}{21bp}\selectfont}
   {\thesubsection}{0.7em}{}
 \titlespacing*{\subsection}{0pt}{12pt}{12pt}
 \setcounter{secnumdepth}{2}
@@ -94,6 +120,14 @@
 % 固定高度的基本信息表单元格。
 \newcommand{\formcell}[2]{%
   \parbox[t][#1][t]{\linewidth}{\vspace{-0.35em}#2}}
+
+% 编号下划线按文字宽度绘制，与文字下缘保持 1.5 磅间距。
+\newsavebox{\CoverNumberBox}
+\newcommand{\CoverNumberUnderline}[1]{%
+  \sbox{\CoverNumberBox}{#1}%
+  \usebox{\CoverNumberBox}%
+  \llap{\raisebox{-\dimexpr\dp\CoverNumberBox+1.5bp+0.5pt\relax}[0pt][0pt]{%
+    \rule{\wd\CoverNumberBox}{0.5pt}}}}
 
 % Filled titles align above the underline; only long titles shrink to fit.
 \newsavebox{\CoverTitleBox}
@@ -113,10 +147,11 @@
 \noindent
 \setlength{\unitlength}{1mm}
 \begin{picture}(169,257)
-  \put(0,252.9){\makebox(0,0)[l]{\fontsize{14pt}{24pt}\selectfont 作品编号：}}
-  \put(23.5,251.6){\makebox(83,0)[l]{\scalebox{1.095}{\fontsize{14pt}{24pt}\selectfont
-    \ifdefempty{\WorkNumber}{\color{red}\bfseries（必须填写系统自动分配的编号）}{\color{black}\WorkNumber}}}}
-  \put(24,249.6){\line(1,0){81.8}}
+  \put(0,252.9){\hbox{\fontsize{14bp}{24bp}\selectfont 作品编号：}}
+  \put(23.5,252.9){\hbox{\fontsize{14bp}{24bp}\selectfont
+    \ifdefempty{\WorkNumber}
+      {\CoverNumberUnderline{\color{red}\bfseries（必须填写系统自动分配的编号）}}
+      {\CoverNumberUnderline{\bfseries\WorkNumber}}}}
 
   \put(0,234){\makebox(0,0)[l]{\fontsize{14pt}{24pt}\selectfont 作品类别：}}
   \put(27,234){\makebox(0,0)[l]{\songfont\fontsize{10.5pt}{24pt}\selectfont
@@ -138,8 +173,8 @@
     \hspace{2em}注意：作品为匿名评审，作品设计报告封面和内容中严禁出现单位名称、
     指导老师姓名或团队成员姓名，违者将被取消参赛资格。提交作品时请将此段落文字删除。}}
 
-  \put(0,45){\makebox(170,0)[c]{\fontsize{14pt}{24pt}\selectfont \WorkDate}}
-  \put(0,34){\makebox(170,0)[c]{\fontsize{14pt}{24pt}\selectfont 中国密码学会}}
+  \put(85,45){\makebox(0,0)[c]{\fontsize{14pt}{24pt}\selectfont \WorkDate}}
+  \put(85,34){\makebox(0,0)[c]{\fontsize{14pt}{24pt}\selectfont 中国密码学会}}
 \end{picture}
 
 % ==================== 基本信息表 ====================
@@ -156,18 +191,18 @@
 \setlength{\arrayrulewidth}{0.5pt}
 \begin{tabular}{!{\vrule width 1.5pt}p{15.22cm}!{\vrule width 1.5pt}}
 \noalign{\hrule height 1.5pt}
-\formcell{0.55cm}{\centering\fontsize{15pt}{22.5pt}\selectfont 基本信息表}\\ \hline
-\formcell{0.57cm}{\fontsize{15pt}{22.5pt}\selectfont 编号：\WorkNumber}\\ \hline
-\formcell{0.57cm}{\fontsize{15pt}{22.5pt}\selectfont 作品题目：\WorkTitle}\\ \hline
-\formcell{0.48cm}{\fontsize{15pt}{22.5pt}\selectfont 作品类别：\quad
+\formcell{0.55cm}{\centering\fontsize{15bp}{22.5bp}\selectfont 基本信息表}\\ \hline
+\formcell{0.57cm}{\fontsize{15bp}{22.5bp}\selectfont 编号：\WorkNumber}\\ \hline
+\formcell{0.57cm}{\fontsize{15bp}{22.5bp}\selectfont 作品题目：\WorkTitle}\\ \hline
+\formcell{0.48cm}{\fontsize{15bp}{22.5bp}\selectfont 作品类别：\quad
   \fontsize{10.5pt}{18pt}\selectfont
   \categorybox{软件设计}\quad\categorybox{硬件制作}\quad\categorybox{工程实践}\quad
   \categorybox{密码应用技术}\quad\categorybox{其它}}\\ \hline
-\formcell{16.23cm}{\fontsize{15pt}{22.5pt}\selectfont 作品内容摘要：\par\vspace{0.5em}
-  {\fontsize{10.5pt}{12.6pt}\selectfont\setlength{\parindent}{2em}%
+\formcell{16.23cm}{\fontsize{15bp}{22.5bp}\selectfont 作品内容摘要：\par\vspace{0.5em}
+  {\fontsize{12bp}{18bp}\selectfont\setlength{\parindent}{2em}%
    \ifdefempty{\WorkAbstract}{}{\indent\WorkAbstract\par}}}\\ \hline
-\formcell{2.20cm}{\fontsize{15pt}{22.5pt}\selectfont 关键词（五个）：\par\vspace{0.35em}
-  {\fontsize{10.5pt}{12.6pt}\selectfont \WorkKeywords\par}}\\
+\formcell{2.20cm}{\fontsize{15bp}{22.5bp}\selectfont 关键词（五个）：\par\vspace{0.35em}
+  {\fontsize{12bp}{18bp}\selectfont \WorkKeywords\par}}\\
 \noalign{\hrule height 1.5pt}
 \end{tabular}
 \end{center}
