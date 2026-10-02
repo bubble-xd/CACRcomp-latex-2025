@@ -4,7 +4,7 @@
 % 编译方式：latexmk -xelatex -interaction=nonstopmode -halt-on-error template.tex
 
 \usepackage[top=2cm,bottom=2cm,left=2cm,right=2cm,
-            headheight=13.1pt,headsep=\dimexpr2cm-1.5cm-13.1pt\relax,footskip=12pt]{geometry}
+            headheight=13.1pt,headsep=\dimexpr2cm-1.5cm-13.1pt\relax,footskip=13pt]{geometry}
 \usepackage{fontspec}
 \usepackage{xeCJK}
 \usepackage{graphicx}
@@ -12,6 +12,7 @@
 \usepackage{tabularx}
 \usepackage{fancyhdr}
 \usepackage{titlesec}
+\usepackage{indentfirst}
 \usepackage{enumitem}
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
@@ -22,6 +23,10 @@
 \usepackage{xcolor}
 \usepackage{etoolbox}
 \usepackage{pifont}
+\usepackage[superscript,nomove]{cite}
+\makeatletter
+\renewcommand{\@citess}[1]{\textsuperscript{[#1]}}
+\makeatother
 \usepackage{hyperref}
 
 % ---------- 字体 ----------
@@ -55,7 +60,7 @@
 \let\TemplateOriginalNormalSize\normalsize
 \renewcommand{\normalsize}{\TemplateOriginalNormalSize\fontsize{14bp}{24bp}\selectfont}
 % 页首第一行使用独立基线位置，避免大字号正文贴到页眉横线。
-\AtBeginDocument{\normalsize\setlength{\topskip}{30bp}}
+\AtBeginDocument{\normalsize\setlength{\parindent}{2em}\setlength{\topskip}{30bp}}
 \setlist{nosep,leftmargin=2em}
 \captionsetup{font=small,labelsep=quad}
 % 表题置于表格上方，与表格上横线保持 4 磅间距。
@@ -69,19 +74,23 @@
 \algrenewcommand{\algorithmicindent}{1.5em}
 \DeclareCaptionFont{algorithmfont}{\fontsize{12bp}{16bp}\selectfont}
 \captionsetup*[algorithm]{font=algorithmfont,labelfont=bf,labelsep=quad}
-% 保留标准 ruled 样式，为页首浮动算法留出 6 磅顶端间距。
+\AtBeginEnvironment{algorithmic}{\fontsize{12bp}{18bp}\selectfont}
+% 图、表与算法共用页首留白，与正文首行的可见位置相协调。
+\newlength{\ReportFloatTopGap}
+\setlength{\ReportFloatTopGap}{16bp}
 \makeatletter
 \newcommand{\fs@reportalgorithm}{%
   \fs@ruled
-  \def\@fs@pre{\vskip6bp\hrule height.8pt depth0pt\kern2pt}}
+  \def\@fs@pre{\vskip\ReportFloatTopGap\hrule height.8pt depth0pt\kern2pt}}
 \makeatother
 \floatstyle{reportalgorithm}
 \restylefloat{algorithm}
-% 留白放在浮动表格盒子内，使表格移到页首后仍与页眉分离。
+% 图和表的留白放在浮动盒子内；算法在 ruled 样式的顶横线之前留白。
 \makeatletter
 \apptocmd{\@floatboxreset}{%
-  \ifdefstring{\@captype}{table}{\vspace*{16bp}}{}%
-}{}{\PackageError{cacr-template}{Unable to set table top spacing}{}}
+  \ifdefstring{\@captype}{table}{\vspace*{\ReportFloatTopGap}}{}%
+  \ifdefstring{\@captype}{figure}{\vspace*{\ReportFloatTopGap}}{}%
+}{}{\PackageError{cacr-template}{Unable to set float top spacing}{}}
 \makeatother
 
 \newcommand{\emptybox}{\makebox[1em][l]{$\square$}}
@@ -93,15 +102,26 @@
 \newcommand{\templategap}{\mbox{}\par\vspace{0.1cm}}
 
 % 页眉段落上边缘距纸张顶端 1.50 cm；页脚段落下边缘距底端 1.75 cm。
-% 正文四边页边距仍为 2 cm；页眉为宋体小五、12 磅行距、灰色。
+% 基础页边距为 2 cm；正文底部另留 5 mm 页脚间距。页眉宋体小五、灰色。
 \definecolor{HeaderGray}{HTML}{808080}
+\newfontfamily\footerfont[Path=fonts/]{times.ttf}
+\newlength{\ReportTextBottom}
+\setlength{\ReportTextBottom}{2cm}
+% 正文底部增加 5 mm 页脚留白；封面和基本信息表的版心保持原样。
+\newcommand{\BeginReportBody}{%
+  \clearpage
+  \setlength{\ReportTextBottom}{2.5cm}%
+  \newgeometry{top=2cm,bottom=2.5cm,left=2cm,right=2cm,%
+    headheight=13.1pt,headsep=\dimexpr2cm-1.5cm-13.1pt\relax,footskip=13pt}%
+  \setlength{\topskip}{30bp}%
+  \pagestyle{mainstyle}}
 \fancypagestyle{mainstyle}{%
   \fancyhf{}
   \fancyheadinit{\normalfont\songfont\fontsize{9bp}{12bp}\selectfont}
   \renewcommand{\headruleskip}{1pt}
   \fancyhead[C]{{\normalfont\songfont\fontsize{9bp}{12bp}\selectfont\color{HeaderGray}全国密码技术竞赛作品设计报告}}
-  \fancyfootinit{\normalfont\fontsize{9bp}{10bp}\selectfont}
-  \fancyfoot[C]{\raisebox{\dimexpr\footskip-2cm+1.75cm+\dp\strutbox\relax}[0pt][0pt]{\fontsize{9bp}{10bp}\selectfont\thepage}}
+  \fancyfootinit{\normalfont\footerfont\fontsize{9bp}{12bp}\selectfont}
+  \fancyfoot[C]{{\normalfont\footerfont\fontsize{9bp}{12bp}\selectfont\color{HeaderGray}\raisebox{\dimexpr\footskip-\ReportTextBottom+1.75cm+\dp\strutbox\relax}[0pt][0pt]{\thepage}}}
   \fancyheadoffset[L,R]{0.53mm}
   \renewcommand{\headrulewidth}{0.75pt}
   \renewcommand{\headrule}{\begingroup\color{HeaderGray}\hrule height\headrulewidth width\headwidth\vskip-\headrulewidth\endgroup}
@@ -112,16 +132,16 @@
 \titleformat{\section}
   {\headinglatinfont\coverfont\bfseries\fontsize{15bp}{22.5bp}\selectfont}
   {\thesection.}{0pt}{}
-\titlespacing*{\section}{0pt}{12pt}{12pt}
+\titlespacing{\section}{0pt}{12pt}{12pt}
 \titleformat{\subsection}
   {\heifont\bfseries\fontsize{14bp}{21bp}\selectfont}
   {\thesubsection}{0.7em}{}
-\titlespacing*{\subsection}{0pt}{12pt}{12pt}
-% 目录标题：二号黑体居中；目录条目仍使用原有两级结构。
+\titlespacing{\subsection}{0pt}{12pt}{12pt}
+% 目录标题：小二黑体居中；目录条目仍使用原有两级结构。
 \newcommand{\ReportTableOfContents}{%
   \begingroup
   \renewcommand{\contentsname}{目\quad 录}%
-  \titleformat{\section}{\centering\heifont\bfseries\fontsize{22bp}{30bp}\selectfont}{}{0pt}{}%
+  \titleformat{\section}{\centering\heifont\bfseries\fontsize{18bp}{26bp}\selectfont}{}{0pt}{}%
   \titlespacing*{\section}{0pt}{12bp}{18bp}%
   \tableofcontents
   \endgroup}
@@ -148,7 +168,7 @@
   \llap{\raisebox{-\dimexpr\dp\CoverNumberBox+1.5bp+0.5pt\relax}[0pt][0pt]{%
     \rule{\wd\CoverNumberBox}{0.5pt}}}}
 
-% Filled titles align above the underline; only long titles shrink to fit.
+% Filled titles are centered above the underline; only long titles shrink to fit.
 \newsavebox{\CoverTitleBox}
 \newcommand{\CoverTitleText}{%
   \sbox{\CoverTitleBox}{\fontsize{14pt}{25pt}\selectfont\WorkTitle}%
@@ -184,9 +204,9 @@
     2026年第十一届全国密码技术竞赛作品设计报告}}
   \put(15,158){\rule{140mm}{3pt}}
 
-  \put(30,132){\makebox(0,0)[lb]{\fontsize{14pt}{25pt}\selectfont 作品题目：}}
-  \put(54,130.5){\rule{97mm}{0.5pt}}
-  \put(55.5,132){\makebox(94.5,0)[lb]{\CoverTitleText}}
+  \put(24.5,132){\makebox(0,0)[lb]{\fontsize{14pt}{25pt}\selectfont 作品题目：}}
+  \put(48.5,130.5){\rule{97mm}{0.5pt}}
+  \put(48.5,132){\makebox(97,0)[b]{\CoverTitleText}}
 
   \put(0,108){\parbox[t]{166mm}{\bfseries\fontsize{14pt}{24pt}\selectfont
     \hspace{2em}注意：作品为匿名评审，作品设计报告封面和内容中严禁出现单位名称、
@@ -227,7 +247,7 @@
 \end{center}
 
 % ==================== 正文 ====================
-\clearpage
+\BeginReportBody
 \section{作品功能与性能说明}
 % 在此填写作品功能、性能和创新点。
 \templategap
